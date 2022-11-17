@@ -7,6 +7,7 @@ library(randomForest)
 source("svm-ref.R")
 RNGkind(sample.kind = "Rejection")
 
+### interface function
 ml.calculate <- function(j,X1,method)
 {
   require("caret")
