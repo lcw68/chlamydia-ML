@@ -1,6 +1,11 @@
 library(Boruta)
+library(caret)
+require(glmnet)
+require(tidyverse)
+library(xgboost)
+library(randomForest)
 
-ml.perf <- function(fit,X.test,final.select,Y.test)
+ml.perf1 <- function(fit,X.test,final.select,Y.test)
 {
   if(is.null(dim(X.test)))
   {
@@ -67,29 +72,29 @@ runburota <- function(j,X1)
     final.fit.rf <- train(formula(paste0("yinfect~",paste0(final.select,collapse = "+"))),
                           data = X.use,method = "rf",ntree = 1000,
                           trControl = fit_control,tuneGrid = tunegrid1,metric = "ROC")
-    perf_rf = ml.perf(final.fit.rf,X.test[,final.select],final.select,Y.test)
+    perf_rf = ml.perf1(final.fit.rf,X.test[,final.select],final.select,Y.test)
     
     final.fit.nb <- train(formula(paste0("yinfect~",paste0(final.select,collapse = "+"))),
                           data = X.use,method = "nb",
                           trControl = fit_control,tuneGrid = tunegrid3,metric = "ROC")
-    perf_nb = ml.perf(final.fit.nb,X.test[,final.select],final.select,Y.test)
+    perf_nb = ml.perf1(final.fit.nb,X.test[,final.select],final.select,Y.test)
     
     # final.fit.els <- train(formula(paste0("yinfect~",paste0(final.select,collapse = "+"))),
     #                       data = X.use,method = "glmnet",family = "binomial",
     #                       trControl = fit_control,tuneGrid = tunegrid2,metric = "ROC")
-    # perf_els = ml.perf(final.fit.els,X.test[,final.select],final.select,Y.test)
+    # perf_els = ml.perf1(final.fit.els,X.test[,final.select],final.select,Y.test)
     # 
     
     final.fit.knn <- train(formula(paste0("yinfect~",paste0(final.select,collapse = "+"))),
                            data = X.use,method = "knn",
                            trControl = fit_control,tuneGrid = tunegrid4,metric = "ROC")
-    perf_knn = ml.perf(final.fit.knn,X.test[,final.select],final.select,Y.test)
+    perf_knn = ml.perf1(final.fit.knn,X.test[,final.select],final.select,Y.test)
     
     
     final.fit.xgb <- train(formula(paste0("yinfect~",paste0(final.select,collapse = "+"))),
                            data = X.use,method = "xgbLinear",
                            trControl = fit_control,tuneGrid = tunegrid5,metric = "ROC")
-    perf_xgb = ml.perf(final.fit.xgb,X.test[,final.select],final.select,Y.test)
+    perf_xgb = ml.perf1(final.fit.xgb,X.test[,final.select],final.select,Y.test)
     
     
     #tp = list(selection = final.select,performance = rfperf)
@@ -101,3 +106,4 @@ runburota <- function(j,X1)
   return(list(performance = dt,selection = final.select))
   #return(tp)
 }
+
