@@ -6,5 +6,5 @@
 #SBATCH -t 6-
 
 module load r/4.1.0
-Rscript 'C01-ML-RFE.R'
+Rscript 'C01-ML-RFE.R' $1
 
